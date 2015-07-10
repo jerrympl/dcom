@@ -24,15 +24,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Word word = new Word("cock", this);
-        word.execute();
-
-
         Button btn = (Button) findViewById(R.id.button_ranking);
+        Button quiz = (Button) findViewById(R.id.button_quiz);
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, RankingActivity.class));
+            }
+        });
+
+        quiz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, QuestionsActivity.class));
             }
         });
 

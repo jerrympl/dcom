@@ -1,10 +1,18 @@
 package eu.sofomo.dcom;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
+import eu.sofomo.dcom.common.AvailableWords;
+import eu.sofomo.dcom.common.Downloader;
 import eu.sofomo.dcom.common.Word;
 
 /**
@@ -12,14 +20,16 @@ import eu.sofomo.dcom.common.Word;
  */
 public class QuestionsActivity extends AppCompatActivity
 {
+    private int currentQuestion = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.questions);
 
-        Word word = new Word("cock", this);
+        AvailableWords availableWords = new AvailableWords();
+        Word word = new Word(availableWords.get(currentQuestion), this);
         word.execute();
-
     }
 
     @Override
