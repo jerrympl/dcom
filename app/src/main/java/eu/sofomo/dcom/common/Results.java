@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -33,7 +36,7 @@ public class Results {
     private void writeToFile(String data) {
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(mActivity.getApplicationContext().openFileOutput("results.txt", Context.MODE_APPEND));
-            outputStreamWriter.write(data+System.getProperty("line.separator"));
+            outputStreamWriter.write(data + System.getProperty("line.separator"));
             outputStreamWriter.close();
         } catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
@@ -46,8 +49,19 @@ public class Results {
 
         String ret = "";
 
+        String path = mActivity.getApplicationContext().getFilesDir().getAbsolutePath();
+        File file = new File(path + "/results.txt");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        InputStream inputStream = null;
         try {
-            InputStream inputStream = mActivity.getApplicationContext().openFileInput("results.txt");
+//            InputStream inputStream = mActivity.getApplicationContext().openFileInput("results.txt");
+            inputStream = new BufferedInputStream(new FileInputStream(file));
 
             if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -97,7 +111,7 @@ public class Results {
     }
 
 
-    public static class Entity {
+    public static class Entity implements Comparable {
 
         public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -161,6 +175,14 @@ public class Results {
         private String deviceName;
 
 
+        @Override
+        public int compareTo(Object another) {
+            Entity entity = (Entity) another;
+            int entResult = Integer.parseInt(entity.getScore());
+
+            int curResult = Integer.parseInt(this.getScore());
+            return entResult - curResult;
+        }
     }
 
 
