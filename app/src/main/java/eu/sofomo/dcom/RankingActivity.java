@@ -39,22 +39,28 @@ public class RankingActivity extends AppCompatActivity {
         for(Results.Entity tmpRes : resultList) {
 
             TableRow row = new TableRow(this);
+
             TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+
 
             TextView t1v = new TextView(this);
-            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
             t1v.setLayoutParams(params);
             t1v.setText(tmpRes.getUserName());
             row.addView(t1v);
 
             TextView t2v = new TextView(this);
+            t2v.setLayoutParams(params);
             t2v.setText(tmpRes.getScore());
             row.addView(t2v);
 
             TextView t3v = new TextView(this);
+            t3v.setLayoutParams(params);
             t3v.setText(tmpRes.getDate().toString());
             row.addView(t3v);
 
+
+            ll.setLayoutParams(lp);
             ll.addView(row);
         }
 
