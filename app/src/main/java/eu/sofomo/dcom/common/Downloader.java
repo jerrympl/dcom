@@ -3,6 +3,7 @@ package eu.sofomo.dcom.common;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -16,12 +17,19 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import eu.sofomo.dcom.R;
 
@@ -32,6 +40,7 @@ public class Downloader extends AsyncTask<Void, Void, String>
     public static final String API_URL = "http://restapi.lion.dictionary.com";
     private static String API_KEY = "898989898989898";
     private static String API_SECRET = "O6Tjyx8iLCAqdooH";
+    private static final String HASH_ALGORITHM = "HmacSHA256";
 
     private Fragment mFragment;
     private Activity mActivity;
@@ -69,9 +78,59 @@ public class Downloader extends AsyncTask<Void, Void, String>
 
     private String generateAuthorizationSum()
     {
-        String sum = apiMethod+"+"+apiUri+"+"+apiQueryString;
+        String sum = apiMethod+"+"+apiUri+"+"+apiQueryString+"&apiKey="+API_KEY;
 
-        return sha256(sum);
+        String secret = API_SECRET;
+
+        Log.i("Info apiMethod: ", apiMethod);
+        Log.i("Info apiURI: ", apiUri);
+        Log.i("Info apiQueryString: ", apiQueryString);
+        Log.i("Info sum: ", sum);
+        Log.i("Info secret: ", secret);
+
+        try {
+            String hmac = hashMac(sum, secret);
+            Log.i("hmac: ", hmac);
+            return hmac;
+        } catch (SignatureException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Encryption of a given text using the provided secretKey
+     *
+     * @param text
+     * @param secretKey
+     * @return the encoded string
+     * @throws SignatureException
+     */
+    public static String hashMac(String text, String secretKey)
+            throws SignatureException {
+
+        try {
+            Key sk = new SecretKeySpec(secretKey.getBytes(), HASH_ALGORITHM);
+            Mac mac = Mac.getInstance(sk.getAlgorithm());
+            mac.init(sk);
+            final byte[] hmac = mac.doFinal(text.getBytes());
+            return byteArrayToHex(hmac);
+        } catch (NoSuchAlgorithmException e1) {
+            // throw an exception or pick a different encryption method
+            throw new SignatureException(
+                    "error building signature, no such algorithm in device "
+                            + HASH_ALGORITHM);
+        } catch (InvalidKeyException e) {
+            throw new SignatureException(
+                    "error building signature, invalid key " + HASH_ALGORITHM);
+        }
+    }
+
+    public static String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder(a.length * 2);
+        for(byte b: a)
+            sb.append(String.format("%02x", b & 0xff));
+        return sb.toString();
     }
 
     private String getUrl()
@@ -93,6 +152,7 @@ public class Downloader extends AsyncTask<Void, Void, String>
             connection.setRequestProperty("Connection", "Keep-Alive");
             connection.setRequestProperty("Authorization", AUTH_METHOD + " " + generateAuthorizationSum());
             connection.setInstanceFollowRedirects(true);
+            Log.e("error code: ", connection.getResponseCode()+"");
             result = new String(readFully(connection.getInputStream()));
 
         } catch (Exception ex) {
@@ -107,7 +167,7 @@ public class Downloader extends AsyncTask<Void, Void, String>
     }
 
     public static String sha256(String base) {
-        try{
+        try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(base.getBytes("UTF-8"));
             StringBuffer hexString = new StringBuffer();

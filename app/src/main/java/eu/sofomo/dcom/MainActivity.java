@@ -17,7 +17,7 @@ public class MainActivity extends ActionBarActivity {
 
         Downloader downloader = new Downloader(this);
         downloader.setApiMethod("GET");
-        downloader.setApiUri("/v3/words/light");
+        downloader.setApiUri("/v3/words.json/light");
         downloader.setApiQueryString("include=dictionaryData&params=dictionaryData.renderer=base");
         downloader.execute();
 
