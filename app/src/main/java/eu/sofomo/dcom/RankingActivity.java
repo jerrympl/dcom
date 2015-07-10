@@ -3,6 +3,7 @@ package eu.sofomo.dcom;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -41,6 +42,8 @@ public class RankingActivity extends AppCompatActivity {
             TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
 
             TextView t1v = new TextView(this);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+            t1v.setLayoutParams(params);
             t1v.setText(tmpRes.getUserName());
             row.addView(t1v);
 
