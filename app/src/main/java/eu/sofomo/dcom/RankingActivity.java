@@ -26,8 +26,6 @@ public class RankingActivity extends AppCompatActivity {
 
         Results res = new Results(this);
 
-//        Results.Entity ent = new Results.Entity("te2mdsfp1", "1", "and233");
-//        res.writeResult(ent);
 
         ArrayList<Results.Entity> resultList = res.readReults();
 

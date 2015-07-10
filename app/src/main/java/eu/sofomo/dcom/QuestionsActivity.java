@@ -21,14 +21,21 @@ import eu.sofomo.dcom.common.Word;
 public class QuestionsActivity extends AppCompatActivity
 {
     private int currentQuestion = 0;
+    private int totalPoints = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.questions);
 
+        Bundle extras = getIntent().getExtras();
+        int wordIndex = 0;
+        if (extras != null) {
+            wordIndex = extras.getInt("wordIndex");
+        }
+
         AvailableWords availableWords = new AvailableWords();
-        Word word = new Word(availableWords.get(currentQuestion), this);
+        Word word = new Word(availableWords.get(wordIndex), this);
         word.execute();
     }
 

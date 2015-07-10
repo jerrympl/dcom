@@ -102,9 +102,11 @@ public class Results {
         for (String line : lines) {
 
             String[] resultTmp = line.split(";");
-            Entity tmpEntity = new Entity(resultTmp[0], resultTmp[1], resultTmp[3], resultTmp[2]);
+            if (resultTmp.length >= 4) {
+                Entity tmpEntity = new Entity(resultTmp[0], resultTmp[1], resultTmp[3], resultTmp[2]);
 
-            resultsList.add(tmpEntity);
+                resultsList.add(tmpEntity);
+            }
         }
 
         return resultsList;
