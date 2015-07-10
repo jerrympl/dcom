@@ -18,8 +18,8 @@ public class MainActivity extends AppCompatActivity {
 
         Downloader downloader = new Downloader(this);
         downloader.setApiMethod("GET");
-        downloader.setApiUri("/v3/words.json/light");
-        downloader.setApiQueryString("include=dictionaryData&params=dictionaryData.renderer=base");
+        downloader.setApiUri("/v3/words.json/darkness");
+        downloader.setApiQueryString("include=dictionaryData");
         downloader.execute();
 
     }

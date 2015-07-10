@@ -146,12 +146,19 @@ public class Downloader extends AsyncTask<Void, Void, String>
         try {
             String u = getUrl();
             URL url = new URL(u);
+            Log.i("URL to connect: ", url.toString());
+
             connection = (HttpURLConnection) url.openConnection();
+
+            connection.setRequestProperty("Authorization", AUTH_METHOD + " " + generateAuthorizationSum());
+            connection.setRequestProperty("Connection", "Keep-Alive");
+            connection.setRequestProperty("Accept", "application/json");
+
+            connection.setInstanceFollowRedirects(false);
+            connection.setRequestMethod("GET");
             connection.setConnectTimeout(70000);
             connection.setReadTimeout(70000);
-            connection.setRequestProperty("Connection", "Keep-Alive");
-            connection.setRequestProperty("Authorization", AUTH_METHOD + " " + generateAuthorizationSum());
-            connection.setInstanceFollowRedirects(true);
+
             Log.e("error code: ", connection.getResponseCode()+"");
             result = new String(readFully(connection.getInputStream()));
 
