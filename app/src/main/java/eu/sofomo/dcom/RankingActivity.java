@@ -8,7 +8,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import eu.sofomo.dcom.common.Results;
 
@@ -24,43 +26,42 @@ public class RankingActivity extends AppCompatActivity {
 
         Results res = new Results(this);
 
-//        Results.Entity ent = new Results.Entity("te2mdsfp1", "200", "and233");
+//        Results.Entity ent = new Results.Entity("te2mdsfp1", "1", "and233");
 //        res.writeResult(ent);
 
         ArrayList<Results.Entity> resultList = res.readReults();
 
-        for(Results.Entity tmpRes : resultList) {
-            Log.i("Info res: ", tmpRes.toString());
-        }
+        Collections.sort(resultList);
 
         TableLayout ll = (TableLayout) findViewById(R.id.result);
 
 
-        for(Results.Entity tmpRes : resultList) {
+        for (Results.Entity tmpRes : resultList) {
 
             TableRow row = new TableRow(this);
 
-            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 1.0f);
+            params.width = 0;
 
 
             TextView t1v = new TextView(this);
-            t1v.setLayoutParams(params);
             t1v.setText(tmpRes.getUserName());
+            t1v.setLayoutParams(params);
             row.addView(t1v);
 
             TextView t2v = new TextView(this);
-            t2v.setLayoutParams(params);
             t2v.setText(tmpRes.getScore());
+            t2v.setLayoutParams(params);
             row.addView(t2v);
 
             TextView t3v = new TextView(this);
+            SimpleDateFormat formatter = new SimpleDateFormat(Results.Entity.DATE_FORMAT);
+            String tmpDate = formatter.format(tmpRes.getDate());
+            t3v.setText(tmpDate);
             t3v.setLayoutParams(params);
-            t3v.setText(tmpRes.getDate().toString());
             row.addView(t3v);
 
 
-            ll.setLayoutParams(lp);
             ll.addView(row);
         }
 
