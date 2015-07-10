@@ -49,6 +49,17 @@ public class Downloader extends AsyncTask<Void, Void, String>
     private String apiUri;
     private String apiMethod;
 
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
+    }
+
+    protected String word;
+
+
     public Downloader()
     {
         super();

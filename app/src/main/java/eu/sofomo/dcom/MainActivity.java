@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import eu.sofomo.dcom.common.Downloader;
+import eu.sofomo.dcom.common.Word;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -16,11 +17,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Downloader downloader = new Downloader(this);
-        downloader.setApiMethod("GET");
-        downloader.setApiUri("/v3/words.json/darkness");
-        downloader.setApiQueryString("include=dictionaryData");
-        downloader.execute();
+        Word word = new Word("cock", this);
+        word.execute();
 
     }
 
